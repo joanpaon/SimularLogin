@@ -150,18 +150,35 @@ public class GUI extends JFrame {
 
     // Inicialización después del IGU
     private void afterInit() {
-        try (FileReader fr = new FileReader(FICHERO)) {
-            // Intanciar propiedades
-            prpApp = new Properties();
-
-            // Cargar las propiedades
-            prpApp.load(fr);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            terminarPrograma();
-        }
+        // Cargar las propiedades
+        prpApp = cargarPropiedades(FICHERO);
     }
 
+    // Fichero > Propiedades
+    public static Properties cargarPropiedades(String fichero) {
+        // Propiedades
+        Properties p;
+
+        // Proceso de carga
+        try (FileReader fr = new FileReader(fichero)) {
+            // Crear propiedades de la BD
+            p = new Properties();
+
+            // Cargar propiedades
+            p.load(fr);
+        } catch (Exception e) {
+            // Mensaje de error
+            System.out.println(e.getLocalizedMessage());
+
+            // No Propiedades
+            p = null;
+        }
+
+        // Devuelve las propiedades
+        return p;
+    }
+
+    // Evento de Acción - Respuesta
     public void procesarAccion(ActionEvent e) {
         if (e.getSource().equals(txfUser)) {
             psfPass.requestFocus();
@@ -177,6 +194,7 @@ public class GUI extends JFrame {
         }
     }
 
+    // Evento de Teclado - Respuesta
     public void procesarTecla(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             e.consume();
@@ -191,6 +209,7 @@ public class GUI extends JFrame {
         }
     }
 
+    // Valida la credencial
     private void procesarCredencial() {
         try {
             // Datos del formulario
