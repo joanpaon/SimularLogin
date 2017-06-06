@@ -15,7 +15,6 @@
  */
 package org.japo.java.forms;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -52,7 +51,7 @@ public class GUI extends JFrame {
     JButton btnAceptar;
 
     // Credenciales de acceso
-    Properties prpAcceso;
+    Properties prpApp;
 
     public GUI() {
         // Inicialización PREVIA
@@ -153,12 +152,12 @@ public class GUI extends JFrame {
     private void afterInit() {
         try (FileReader fr = new FileReader(FICHERO)) {
             // Intanciar propiedades
-            prpAcceso = new Properties();
-            
+            prpApp = new Properties();
+
             // Cargar las propiedades
-            prpAcceso.load(fr);
+            prpApp.load(fr);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar datos");
+            JOptionPane.showMessageDialog(this, e.getMessage());
             terminarPrograma();
         }
     }
@@ -193,19 +192,25 @@ public class GUI extends JFrame {
     }
 
     private void procesarCredencial() {
-        // Datos del formulario
-        String userAct = txfUser.getText();
-        char[] passAct = psfPass.getPassword();
+        try {
+            // Datos del formulario
+            String userAct = txfUser.getText();
+            char[] passAct = psfPass.getPassword();
 
-        // Datos de acceso
-        String userRef = prpAcceso.getProperty("user", "");
-        char[] passRef = prpAcceso.getProperty("pass", "").toCharArray();
+            // Datos de acceso
+            String userRef = prpApp.getProperty("user");
+            char[] passRef = prpApp.getProperty("pass").toCharArray();
 
-        if (userAct.equals(userRef) && Arrays.equals(passAct, passRef)) {
-            JOptionPane.showMessageDialog(this, "Acceso PERMITIDO");
-            terminarPrograma();
-        } else {
+            // Valida el acceso
+            if (userAct.equals(userRef) && Arrays.equals(passAct, passRef)) {
+                JOptionPane.showMessageDialog(this, "Acceso PERMITIDO");
+                terminarPrograma();
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Acceso DENEGADO");
+            System.out.println(e);
         }
     }
 
@@ -219,5 +224,4 @@ public class GUI extends JFrame {
         // Cerrar programa
         System.exit(0);
     }
-
 }
