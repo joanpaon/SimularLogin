@@ -15,13 +15,16 @@
  */
 package org.japo.java.forms;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.FileReader;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Properties;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,8 +32,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.japo.java.components.BackgroundPanel;
 import org.japo.java.events.AEM;
 import org.japo.java.events.KEM;
+import org.japo.java.libraries.UtilesSwing;
 
 /**
  *
@@ -38,94 +43,86 @@ import org.japo.java.events.KEM;
  */
 public class GUI extends JFrame {
 
-    // Tamaño de la ventana
-    public static final int VENTANA_ANC = 290;
-    public static final int VENTANA_ALT = 240;
+    // Propiedades App
+    public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
+    public static final String PRP_FAVICON = "favicon";
+    public static final String PRP_USER = "user";
+    public static final String PRP_PASS = "user";
 
-    // Nombre del fichero de datos
-    private static final String FICHERO = "password.txt";
+    // Valores por Defecto
+    public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_NIMBUS;
+    public static final String DEF_FAVICON = "img/favicon.png";
+    public static final String DEF_USER = "admin";
+    public static final String DEF_PASS = "123456";
 
-    // Referencias a los componentes
+    // Referencias
+    private Properties prp;
     JTextField txfUser;
     JPasswordField psfPass;
     JButton btnAceptar;
 
-    // Credenciales de acceso
-    Properties prpApp;
+    // Constructor
+    public GUI(Properties prp) {
+        // Inicialización Anterior
+        initBefore(prp);
 
-    public GUI() {
-        // Inicialización PREVIA
-        beforeInit();
-
-        // Creación del interfaz
+        // Creación Interfaz
         initComponents();
 
-        // Inicialización POSTERIOR
-        afterInit();
+        // Inicializacion Posterior
+        initAfter();
     }
 
     // Construcción del IGU
     private void initComponents() {
-        // Fuente para las etiquetas
-        Font f = new Font("Calibri", Font.BOLD + Font.ITALIC, 16);
-
-        // Gestor de Eventos de Accion
-        AEM aem = new AEM(this);
-
-        // Gestor de Eventos de Teclado
-        KEM kem = new KEM(this);
-
-        // Tamaños de los controles
-        Dimension dimLabel = new Dimension(80, 30);
-        Dimension dimField = new Dimension(120, 30);
-        Dimension dimBoton = new Dimension(100, 30);
-
         // Etiqueta de usuario
         JLabel lblUser = new JLabel("Usuario");
-        lblUser.setFont(f);
-        lblUser.setSize(dimLabel);
-        lblUser.setLocation(35, 35);
+        lblUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        lblUser.setSize(new Dimension(160, 40));
+        lblUser.setLocation(35, 60);
         lblUser.setHorizontalAlignment(JLabel.RIGHT);
 
         // Etiqueta de password
         JLabel lblPass = new JLabel("Contraseña");
-        lblPass.setFont(f);
-        lblPass.setSize(dimLabel);
-        lblPass.setLocation(35, 85);
+        lblPass.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        lblPass.setSize(new Dimension(160, 40));
+        lblPass.setLocation(35, 120);
         lblPass.setHorizontalAlignment(JLabel.RIGHT);
 
         // Campo de texto de usuario
         txfUser = new JTextField();
-        txfUser.setFont(f);
-        txfUser.setSize(dimField);
-        txfUser.setLocation(130, 30);
-        txfUser.addActionListener(aem);
+        txfUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        txfUser.setSize(new Dimension(200, 40));
+        txfUser.setLocation(220, 60);
+        txfUser.addActionListener(new AEM(this));
 
         // Campo de texto de password
         psfPass = new JPasswordField();
-        psfPass.setFont(f);
-        psfPass.setSize(dimField);
-        psfPass.setLocation(130, 85);
-        psfPass.addActionListener(aem);
+        psfPass.setFont(new Font("Calibri", Font.BOLD, 30));
+        psfPass.setSize(new Dimension(200, 40));
+        psfPass.setLocation(220, 120);
+        psfPass.addActionListener(new AEM(this));
 
         // Botón de aceptar
         btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(f);
-        btnAceptar.setSize(dimBoton);
-        btnAceptar.setLocation(30, 145);
-        btnAceptar.addActionListener(aem);
-        btnAceptar.addKeyListener(kem);
+        btnAceptar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        btnAceptar.setSize(new Dimension(140, 40));
+        btnAceptar.setLocation(80, 200);
+        btnAceptar.addActionListener(new AEM(this));
+        btnAceptar.addKeyListener(new KEM(this));
 
         // Botón de cancelar
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setFont(f);
-        btnCancelar.setSize(dimBoton);
-        btnCancelar.setLocation(150, 145);
-        btnCancelar.addActionListener(aem);
-        btnCancelar.addKeyListener(kem);
+        btnCancelar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        btnCancelar.setSize(new Dimension(140, 40));
+        btnCancelar.setLocation(250, 200);
+        btnCancelar.addActionListener(new AEM(this));
+        btnCancelar.addKeyListener(new KEM(this));
 
         // Panel Principal
-        JPanel pnlPpal = new JPanel();
+        URL urlPpal = ClassLoader.getSystemResource("img/mapa.png");
+        Image imgPpal = new ImageIcon(urlPpal).getImage();
+        JPanel pnlPpal = new BackgroundPanel(imgPpal);
         pnlPpal.setLayout(null);
         pnlPpal.add(lblUser);
         pnlPpal.add(lblPass);
@@ -135,47 +132,29 @@ public class GUI extends JFrame {
         pnlPpal.add(btnCancelar);
 
         // Ventana principal
-        setTitle("Simular Login");
         setContentPane(pnlPpal);
+        setTitle("Swing Manual #08");
         setResizable(false);
-        setSize(VENTANA_ANC, VENTANA_ALT);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setBackground(new Color(0, 0, 0, 0));
     }
 
-    // Inicialización antes del IGU
-    private void beforeInit() {
+    // Inicialización Anterior    
+    private void initBefore(Properties prp) {
+        // Memorizar Referencia
+        this.prp = prp;
 
+        // Establecer LnF
+        UtilesSwing.establecerLnF(prp.getProperty(PRP_LOOK_AND_FEEL, DEF_LOOK_AND_FEEL));
     }
 
-    // Inicialización después del IGU
-    private void afterInit() {
-        // Cargar las propiedades
-        prpApp = cargarPropiedades(FICHERO);
-    }
-
-    // Fichero > Propiedades
-    public static Properties cargarPropiedades(String fichero) {
-        // Propiedades
-        Properties p;
-
-        // Proceso de carga
-        try (FileReader fr = new FileReader(fichero)) {
-            // Crear propiedades de la BD
-            p = new Properties();
-
-            // Cargar propiedades
-            p.load(fr);
-        } catch (Exception e) {
-            // Mensaje de error
-            System.out.println(e.getLocalizedMessage());
-
-            // No Propiedades
-            p = null;
-        }
-
-        // Devuelve las propiedades
-        return p;
+    // Inicialización Anterior
+    private void initAfter() {
+        // Establecer Favicon
+        UtilesSwing.establecerFavicon(this, prp.getProperty(PRP_FAVICON, DEF_FAVICON));
     }
 
     // Evento de Acción - Respuesta
@@ -190,7 +169,7 @@ public class GUI extends JFrame {
             txfUser.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Proceso CANCELADO");
-            terminarPrograma();
+            UtilesSwing.terminarPrograma(this);
         }
     }
 
@@ -204,7 +183,7 @@ public class GUI extends JFrame {
                 txfUser.requestFocus();
             } else {
                 JOptionPane.showMessageDialog(this, "Proceso CANCELADO");
-                terminarPrograma();
+                UtilesSwing.terminarPrograma(this);
             }
         }
     }
@@ -212,35 +191,27 @@ public class GUI extends JFrame {
     // Valida la credencial
     private void procesarCredencial() {
         try {
-            // Datos del formulario
+            // Credencial Introducida
             String userAct = txfUser.getText();
             char[] passAct = psfPass.getPassword();
 
-            // Datos de acceso
-            String userRef = prpApp.getProperty("user");
-            char[] passRef = prpApp.getProperty("pass").toCharArray();
+            // Credencial Referencia
+            String userRef = prp.getProperty(PRP_USER, DEF_USER);
+            char[] passRef = prp.getProperty(PRP_PASS, DEF_PASS).toCharArray();
 
-            // Valida el acceso
+            // Procesar Credencial
             if (userAct.equals(userRef) && Arrays.equals(passAct, passRef)) {
+                // Iniciar Sesión Trabajo
                 JOptionPane.showMessageDialog(this, "Acceso PERMITIDO");
-                terminarPrograma();
+
+                // Finalizar Sesión Trabajo
+                UtilesSwing.terminarPrograma(this);
             } else {
+                // Acceso Denegado
                 throw new Exception();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Acceso DENEGADO");
-            System.out.println(e);
         }
-    }
-
-    private void terminarPrograma() {
-        // Ocultar la ventana
-        setVisible(false);
-
-        // Devolver
-        dispose();
-
-        // Cerrar programa
-        System.exit(0);
     }
 }

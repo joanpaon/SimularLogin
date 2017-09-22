@@ -15,26 +15,26 @@
  */
 package org.japo.java.events;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.japo.java.forms.GUI;
 
 /**
  *
  * @author José A. Pacheco Ondoño - joanpaon@gmail.com
  */
-public class KEM extends KeyAdapter {
+public class CEM implements ChangeListener {
 
     // Referencia al GUI
     private final GUI gui;
 
     // Constructor
-    public KEM(GUI gui) {
+    public CEM(GUI gui) {
         this.gui = gui;
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        gui.procesarTecla(e);
+    public void stateChanged(ChangeEvent e) {
+
     }
 }

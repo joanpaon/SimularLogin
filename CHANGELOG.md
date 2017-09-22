@@ -1,5 +1,10 @@
 <pre>
 
+Version 0.1.3
+=============
+> Simplified and improved code
+-------
+
 Version 0.1.2 - 06/06/2017
 ==========================
 
