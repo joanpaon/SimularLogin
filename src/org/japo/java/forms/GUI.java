@@ -46,12 +46,14 @@ public class GUI extends JFrame {
     // Propiedades App
     public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
     public static final String PRP_FAVICON = "favicon";
+    public static final String PRP_BACKGROUND = "background";
     public static final String PRP_USER = "user";
-    public static final String PRP_PASS = "user";
+    public static final String PRP_PASS = "pass";
 
     // Valores por Defecto
     public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_NIMBUS;
     public static final String DEF_FAVICON = "img/favicon.png";
+    public static final String DEF_BACKGROUND = "img/mapa.png";
     public static final String DEF_USER = "admin";
     public static final String DEF_PASS = "123456";
 
@@ -103,7 +105,7 @@ public class GUI extends JFrame {
         psfPass.setLocation(220, 120);
         psfPass.addActionListener(new AEM(this));
 
-        // Botón de aceptar
+        // Botón Aceptar
         btnAceptar = new JButton("Aceptar");
         btnAceptar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
         btnAceptar.setSize(new Dimension(140, 40));
@@ -111,7 +113,7 @@ public class GUI extends JFrame {
         btnAceptar.addActionListener(new AEM(this));
         btnAceptar.addKeyListener(new KEM(this));
 
-        // Botón de cancelar
+        // Botón Cancelar
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
         btnCancelar.setSize(new Dimension(140, 40));
@@ -120,7 +122,8 @@ public class GUI extends JFrame {
         btnCancelar.addKeyListener(new KEM(this));
 
         // Panel Principal
-        URL urlPpal = ClassLoader.getSystemResource("img/mapa.png");
+        String fondoPpal = prp.getProperty(PRP_BACKGROUND, DEF_BACKGROUND);
+        URL urlPpal = ClassLoader.getSystemResource(fondoPpal);
         Image imgPpal = new ImageIcon(urlPpal).getImage();
         JPanel pnlPpal = new BackgroundPanel(imgPpal);
         pnlPpal.setLayout(null);
@@ -151,7 +154,7 @@ public class GUI extends JFrame {
         UtilesSwing.establecerLnF(prp.getProperty(PRP_LOOK_AND_FEEL, DEF_LOOK_AND_FEEL));
     }
 
-    // Inicialización Anterior
+    // Inicialización Posterior
     private void initAfter() {
         // Establecer Favicon
         UtilesSwing.establecerFavicon(this, prp.getProperty(PRP_FAVICON, DEF_FAVICON));
