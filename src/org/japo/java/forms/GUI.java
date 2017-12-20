@@ -75,16 +75,16 @@ public class GUI extends JFrame {
         initAfter();
     }
 
-    // Construcción del IGU
+    // Construcción - GUI
     private void initComponents() {
-        // Etiqueta de usuario
+        // Etiqueta Usuario
         JLabel lblUser = new JLabel("Usuario");
         lblUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
         lblUser.setSize(new Dimension(160, 40));
         lblUser.setLocation(35, 60);
         lblUser.setHorizontalAlignment(JLabel.RIGHT);
 
-        // Etiqueta de password
+        // Etiqueta Password
         JLabel lblPass = new JLabel("Contraseña");
         lblPass.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
         lblPass.setSize(new Dimension(160, 40));
@@ -121,11 +121,13 @@ public class GUI extends JFrame {
         btnCancelar.addActionListener(new AEM(this));
         btnCancelar.addKeyListener(new KEM(this));
 
+        // Imagen de Fondo
+        String rutaImg = prp.getProperty(PRP_BACKGROUND, DEF_BACKGROUND);
+        URL urlImg = ClassLoader.getSystemResource(rutaImg);
+        Image img = new ImageIcon(urlImg).getImage();
+
         // Panel Principal
-        String fondoPpal = prp.getProperty(PRP_BACKGROUND, DEF_BACKGROUND);
-        URL urlPpal = ClassLoader.getSystemResource(fondoPpal);
-        Image imgPpal = new ImageIcon(urlPpal).getImage();
-        JPanel pnlPpal = new BackgroundPanel(imgPpal);
+        JPanel pnlPpal = new BackgroundPanel(img);
         pnlPpal.setLayout(null);
         pnlPpal.add(lblUser);
         pnlPpal.add(lblPass);
@@ -134,7 +136,7 @@ public class GUI extends JFrame {
         pnlPpal.add(btnAceptar);
         pnlPpal.add(btnCancelar);
 
-        // Ventana principal
+        // Ventana Principal
         setContentPane(pnlPpal);
         setTitle("Swing Manual #08");
         setResizable(false);
