@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Properties;
@@ -35,6 +36,8 @@ import javax.swing.JTextField;
 import org.japo.java.components.BackgroundPanel;
 import org.japo.java.events.AEM;
 import org.japo.java.events.KEM;
+import org.japo.java.events.MEM;
+import org.japo.java.events.MMEM;
 import org.japo.java.libraries.UtilesSwing;
 
 /**
@@ -62,6 +65,10 @@ public class GUI extends JFrame {
     JTextField txfUser;
     JPasswordField psfPass;
     JButton btnAceptar;
+
+    // Posición ventana
+    private int xIni;
+    private int yIni;
 
     // Constructor
     public GUI(Properties prp) {
@@ -145,6 +152,8 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
+        addMouseListener(new MEM(this));
+        addMouseMotionListener(new MMEM(this));
     }
 
     // Inicialización Anterior    
@@ -218,5 +227,32 @@ public class GUI extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Acceso DENEGADO");
         }
+    }
+
+    // Inicio de Arrastre de Ventana
+    public void iniciarArrastre(MouseEvent e) {
+        // Posición inicio arrastre
+        xIni = e.getXOnScreen();
+        yIni = e.getYOnScreen();
+    }
+
+    // Arrastre de Ventana
+    public void gestionarArrastre(MouseEvent e) {
+        // Coordenada X
+        int xFin = e.getXOnScreen();
+        int xOff = xFin - xIni;
+        xIni = xFin;
+
+        // Coordenada Y
+        int yFin = e.getYOnScreen();
+        int yOff = yFin - yIni;
+        yIni = yFin;
+
+        // Posición de la ventana
+        int xWin = getLocation().x;
+        int yWin = getLocation().y;
+
+        // Posiciona la ventana
+        setLocation(xWin + xOff, yWin + yOff);
     }
 }

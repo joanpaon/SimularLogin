@@ -35,7 +35,6 @@ public class MEM extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        gui.iniciarArrastre(e);
     }
-    
 }
