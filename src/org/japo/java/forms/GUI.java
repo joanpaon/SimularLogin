@@ -50,13 +50,15 @@ public class GUI extends JFrame {
     public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
     public static final String PRP_FAVICON = "favicon";
     public static final String PRP_BACKGROUND = "background";
+    public static final String PRP_FUENTE = "fuente";
     public static final String PRP_USER = "user";
     public static final String PRP_PASS = "pass";
 
     // Valores por Defecto
-    public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_NIMBUS;
-    public static final String DEF_FAVICON = "img/favicon.png";
-    public static final String DEF_BACKGROUND = "img/mapa.png";
+    public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_WINDOWS;
+    public static final String DEF_FAVICON = "images/favicon.png";
+    public static final String DEF_BACKGROUND = "images/background.png";
+    public static final String DEF_FUENTE = "fonts/CandyRoundBTN.ttf";
     public static final String DEF_USER = "admin";
     public static final String DEF_PASS = "123456";
 
@@ -65,6 +67,7 @@ public class GUI extends JFrame {
     JTextField txfUser;
     JPasswordField psfPass;
     JButton btnAceptar;
+    JButton btnCancelar;
 
     // Posición ventana
     private int xIni;
@@ -87,54 +90,67 @@ public class GUI extends JFrame {
         // Etiqueta Usuario
         JLabel lblUser = new JLabel("Usuario");
         lblUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        lblUser.setFont(UtilesSwing.cargarFuente(
+                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+                deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblUser.setSize(new Dimension(160, 40));
         lblUser.setLocation(35, 60);
         lblUser.setHorizontalAlignment(JLabel.RIGHT);
 
         // Etiqueta Password
         JLabel lblPass = new JLabel("Contraseña");
-        lblPass.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        lblPass.setFont(UtilesSwing.cargarFuente(
+                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+                deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblPass.setSize(new Dimension(160, 40));
         lblPass.setLocation(35, 120);
         lblPass.setHorizontalAlignment(JLabel.RIGHT);
 
         // Campo de texto de usuario
         txfUser = new JTextField();
-        txfUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        txfUser.setFont(UtilesSwing.cargarFuente(
+                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+                deriveFont(Font.BOLD + Font.ITALIC, 30f));
         txfUser.setSize(new Dimension(200, 40));
         txfUser.setLocation(220, 60);
         txfUser.addActionListener(new AEM(this));
+        txfUser.addKeyListener(new KEM(this));
 
         // Campo de texto de password
         psfPass = new JPasswordField();
-        psfPass.setFont(new Font("Calibri", Font.BOLD, 30));
+        psfPass.setFont(new Font("SansSerif", Font.BOLD + Font.ITALIC, 16));
         psfPass.setSize(new Dimension(200, 40));
         psfPass.setLocation(220, 120);
         psfPass.addActionListener(new AEM(this));
+        psfPass.addKeyListener(new KEM(this));
 
         // Botón Aceptar
         btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        btnAceptar.setFont(UtilesSwing.cargarFuente(
+                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+                deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnAceptar.setSize(new Dimension(140, 40));
         btnAceptar.setLocation(80, 200);
         btnAceptar.addActionListener(new AEM(this));
         btnAceptar.addKeyListener(new KEM(this));
 
         // Botón Cancelar
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
+        btnCancelar = new JButton("Cancelar");
+        btnCancelar.setFont(UtilesSwing.cargarFuente(
+                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+                deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnCancelar.setSize(new Dimension(140, 40));
         btnCancelar.setLocation(250, 200);
         btnCancelar.addActionListener(new AEM(this));
         btnCancelar.addKeyListener(new KEM(this));
 
-        // Imagen de Fondo
-        String rutaImg = prp.getProperty(PRP_BACKGROUND, DEF_BACKGROUND);
-        URL urlImg = ClassLoader.getSystemResource(rutaImg);
-        Image img = new ImageIcon(urlImg).getImage();
+        // Imagen de fondo
+        String bckPpal = prp.getProperty(PRP_BACKGROUND, DEF_BACKGROUND);
+        URL urlPpal = ClassLoader.getSystemResource(bckPpal);
+        Image imgPpal = new ImageIcon(urlPpal).getImage();
 
         // Panel Principal
-        JPanel pnlPpal = new BackgroundPanel(img);
+        JPanel pnlPpal = new BackgroundPanel(imgPpal);
         pnlPpal.setLayout(null);
         pnlPpal.add(lblUser);
         pnlPpal.add(lblPass);
@@ -152,6 +168,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
+        addKeyListener(new KEM(this));
         addMouseListener(new MEM(this));
         addMouseMotionListener(new MMEM(this));
     }
@@ -189,16 +206,24 @@ public class GUI extends JFrame {
 
     // Evento de Teclado - Respuesta
     public void procesarTecla(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            e.consume();
-        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (e.getSource().equals(btnAceptar)) {
-                procesarCredencial();
-                txfUser.requestFocus();
-            } else {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
                 JOptionPane.showMessageDialog(this, "Proceso CANCELADO");
                 UtilesSwing.terminarPrograma(this);
-            }
+                break;
+            case KeyEvent.VK_SPACE:
+                if (e.getSource() instanceof JButton) {
+                    e.consume();
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                if (e.getSource().equals(btnAceptar)) {
+                    procesarCredencial();
+                    txfUser.requestFocus();
+                } else if (e.getSource().equals(btnCancelar)) {
+                    JOptionPane.showMessageDialog(this, "Proceso CANCELADO");
+                    UtilesSwing.terminarPrograma(this);
+                }
         }
     }
 
