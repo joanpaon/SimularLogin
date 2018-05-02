@@ -35,10 +35,10 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             // Cargar Propiedades App
             Properties prp = UtilesApp.importarPropiedadesRecurso(RECURSO_PROPIEDADES);
-
+            
             // Instanciar GUI
             GUI gui = new GUI(prp);
-
+            
             // Mostrar GUI
             gui.setVisible(true);
         });

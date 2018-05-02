@@ -50,7 +50,7 @@ public class GUI extends JFrame {
     public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
     public static final String PRP_FAVICON = "favicon";
     public static final String PRP_BACKGROUND = "background";
-    public static final String PRP_FUENTE = "fuente";
+    public static final String PRP_FONT = "fuente";
     public static final String PRP_USER = "user";
     public static final String PRP_PASS = "pass";
 
@@ -58,16 +58,16 @@ public class GUI extends JFrame {
     public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_WINDOWS;
     public static final String DEF_FAVICON = "images/favicon.png";
     public static final String DEF_BACKGROUND = "images/background.png";
-    public static final String DEF_FUENTE = "fonts/CandyRoundBTN.ttf";
+    public static final String DEF_FONT = "fonts/CandyRoundBTN.ttf";
     public static final String DEF_USER = "admin";
     public static final String DEF_PASS = "123456";
 
     // Referencias
     private Properties prp;
-    JTextField txfUser;
-    JPasswordField psfPass;
-    JButton btnAceptar;
-    JButton btnCancelar;
+    private JTextField txfUser;
+    private JPasswordField psfPass;
+    private JButton btnAceptar;
+    private JButton btnCancelar;
 
     // Posición ventana
     private int xIni;
@@ -89,9 +89,7 @@ public class GUI extends JFrame {
     private void initComponents() {
         // Etiqueta Usuario
         JLabel lblUser = new JLabel("Usuario");
-        lblUser.setFont(new Font("Candy Round BTN", Font.BOLD + Font.ITALIC, 30));
-        lblUser.setFont(UtilesSwing.cargarFuente(
-                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+        lblUser.setFont(UtilesSwing.cargarFuente(prp.getProperty(PRP_FONT, DEF_FONT)).
                 deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblUser.setSize(new Dimension(160, 40));
         lblUser.setLocation(35, 60);
@@ -99,8 +97,7 @@ public class GUI extends JFrame {
 
         // Etiqueta Password
         JLabel lblPass = new JLabel("Contraseña");
-        lblPass.setFont(UtilesSwing.cargarFuente(
-                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+        lblPass.setFont(UtilesSwing.cargarFuente(prp.getProperty(PRP_FONT, DEF_FONT)).
                 deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblPass.setSize(new Dimension(160, 40));
         lblPass.setLocation(35, 120);
@@ -108,8 +105,7 @@ public class GUI extends JFrame {
 
         // Campo de texto de usuario
         txfUser = new JTextField();
-        txfUser.setFont(UtilesSwing.cargarFuente(
-                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+        txfUser.setFont(UtilesSwing.cargarFuente(prp.getProperty(PRP_FONT, DEF_FONT)).
                 deriveFont(Font.BOLD + Font.ITALIC, 30f));
         txfUser.setSize(new Dimension(200, 40));
         txfUser.setLocation(220, 60);
@@ -126,8 +122,7 @@ public class GUI extends JFrame {
 
         // Botón Aceptar
         btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(UtilesSwing.cargarFuente(
-                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+        btnAceptar.setFont(UtilesSwing.cargarFuente(prp.getProperty(PRP_FONT, DEF_FONT)).
                 deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnAceptar.setSize(new Dimension(140, 40));
         btnAceptar.setLocation(80, 200);
@@ -136,8 +131,7 @@ public class GUI extends JFrame {
 
         // Botón Cancelar
         btnCancelar = new JButton("Cancelar");
-        btnCancelar.setFont(UtilesSwing.cargarFuente(
-                prp.getProperty(PRP_FUENTE, DEF_FUENTE)).
+        btnCancelar.setFont(UtilesSwing.cargarFuente(prp.getProperty(PRP_FONT, DEF_FONT)).
                 deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnCancelar.setSize(new Dimension(140, 40));
         btnCancelar.setLocation(250, 200);
@@ -161,8 +155,6 @@ public class GUI extends JFrame {
 
         // Ventana Principal
         setContentPane(pnlPpal);
-        setTitle("Swing Manual #08");
-        setResizable(false);
         setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

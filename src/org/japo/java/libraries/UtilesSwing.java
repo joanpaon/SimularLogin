@@ -247,20 +247,16 @@ public class UtilesSwing {
     // Cargar Fuente TTF
     public static final Font cargarFuente(String rutaFuente) {
         // Referencia a la fuente
-        Font fntActual;
+        Font f;
 
         // Cargar Fuente
-        try {
-            // Crea Acceso al Fichero
-            InputStream is = ClassLoader.getSystemResourceAsStream(rutaFuente);
-
-            // Instancia fuente
-            fntActual = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, 12f);
+        try (InputStream is = ClassLoader.getSystemResourceAsStream(rutaFuente);){
+            f = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, 12f);
         } catch (FontFormatException | IOException e) {
-            fntActual = new Font("SansSerif", Font.PLAIN, 12);
+            f = new Font("SansSerif", Font.PLAIN, 12);
         }
 
         // Devuelve fuente
-        return fntActual;
+        return f;
     }
 }
