@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 José A. Pacheco Ondoño - joanpaon@gmail.com.
+ * Copyright 2019 José A. Pacheco Ondoño - joanpaon@gmail.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Properties;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,38 +44,44 @@ import org.japo.java.libraries.UtilesSwing;
 public final class GUI extends JFrame {
 
     // Propiedades App
-    public static final String PRP_LOOK_AND_FEEL_PROFILE = "form_look_and_feel_profile";
-    public static final String PRP_FAVICON_RESOURCE = "form_favicon_resource";
-    public static final String PRP_FORM_TITLE = "form_title";
+    public static final String PRP_FAVICON_RESOURCE = "favicon_resource";
+    public static final String PRP_FONT_RESOURCE = "font_resource";
     public static final String PRP_FORM_HEIGHT = "form_height";
     public static final String PRP_FORM_WIDTH = "form_width";
-    public static final String PRP_FORM_BACKGROUND_RESOURCE = "form_background_resource";
-    public static final String PRP_FORM_FONT_RESOURCE = "form_font_resource";
+    public static final String PRP_FORM_TITLE = "form_title";
+    public static final String PRP_IMAGE_RESOURCE = "image_resource";
+    public static final String PRP_LOOK_AND_FEEL_PROFILE = "look_and_feel_profile";
     public static final String PRP_USER = "user";
     public static final String PRP_PASS = "pass";
 
     // Valores por Defecto
-    public static final String DEF_LOOK_AND_FEEL_PROFILE = UtilesSwing.LNF_WINDOWS_PROFILE;
     public static final String DEF_FAVICON_RESOURCE = "img/favicon.png";
-    public static final String DEF_FORM_TITLE = "Swing Manual App";
+    public static final String DEF_FONT_FALLBACK_NAME = Font.SERIF;
+    public static final String DEF_FONT_SYSTEM_NAME = "Kaufmann BT";
     public static final int DEF_FORM_HEIGHT = 300;
     public static final int DEF_FORM_WIDTH = 500;
-    public static final String DEF_FORM_BACKGROUND_RESOURCE = "img/background.png";
-    public static final String DEF_FORM_FONT_RESOURCE = "fonts/default_font.ttf";
+    public static final String DEF_FORM_TITLE = "Swing Manual App";
+    public static final String DEF_LOOK_AND_FEEL_PROFILE = UtilesSwing.LNF_WINDOWS_PROFILE;
     public static final String DEF_USER = "admin";
     public static final String DEF_PASS = "123456";
 
     // Referencias
-    private Properties prp;
+    private final Properties prp;
 
     // Componentes
-    JLabel lblUser;
-    JLabel lblPass;
+    private JLabel lblUser;
+    private JLabel lblPass;
     private JTextField txfUser;
     private JPasswordField psfPass;
     private JButton btnAceptar;
     private JButton btnCancelar;
     private JPanel pnlPpal;
+
+    // Fuentes
+    private Font fntSample;
+
+    // Imágenes
+    private Image imgPapiro;
 
     // Posición ventana
     private int xIni;
@@ -100,69 +104,56 @@ public final class GUI extends JFrame {
 
     // Construcción - GUI
     private void initComponents() {
+        // Fuentes
+        fntSample = UtilesSwing.generarFuenteRecurso(
+                prp.getProperty(PRP_FONT_RESOURCE),
+                DEF_FONT_SYSTEM_NAME,
+                DEF_FONT_FALLBACK_NAME);
+
+        // Imágenes
+        imgPapiro = UtilesSwing.importarImagenRecurso(
+                prp.getProperty(PRP_IMAGE_RESOURCE));
+
         // Etiqueta Usuario
         lblUser = new JLabel("Usuario");
-        lblUser.setFont(UtilesSwing.importarFuenteRecurso(
-                prp.getProperty(PRP_FORM_FONT_RESOURCE, DEF_FORM_FONT_RESOURCE)).
-                deriveFont(Font.BOLD + Font.ITALIC, 30f));
+        lblUser.setFont(fntSample.deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblUser.setSize(160, 40);
         lblUser.setLocation(35, 60);
         lblUser.setHorizontalAlignment(JLabel.RIGHT);
 
         // Etiqueta Password
         lblPass = new JLabel("Contraseña");
-        lblPass.setFont(UtilesSwing.importarFuenteRecurso(
-                prp.getProperty(PRP_FORM_FONT_RESOURCE, DEF_FORM_FONT_RESOURCE)).
-                deriveFont(Font.BOLD + Font.ITALIC, 30f));
+        lblPass.setFont(fntSample.deriveFont(Font.BOLD + Font.ITALIC, 30f));
         lblPass.setSize(160, 40);
         lblPass.setLocation(35, 120);
         lblPass.setHorizontalAlignment(JLabel.RIGHT);
 
         // Campo de texto de usuario
         txfUser = new JTextField();
-        txfUser.setFont(UtilesSwing.importarFuenteRecurso(
-                prp.getProperty(PRP_FORM_FONT_RESOURCE, DEF_FORM_FONT_RESOURCE)).
-                deriveFont(Font.BOLD + Font.ITALIC, 30f));
+        txfUser.setFont(fntSample.deriveFont(Font.BOLD + Font.ITALIC, 30f));
         txfUser.setSize(200, 40);
         txfUser.setLocation(220, 60);
-        txfUser.addActionListener(new AEM(this));
-        txfUser.addKeyListener(new KEM(this));
 
         // Campo de texto de password
         psfPass = new JPasswordField();
         psfPass.setFont(new Font("SansSerif", Font.BOLD + Font.ITALIC, 16));
         psfPass.setSize(200, 40);
         psfPass.setLocation(220, 120);
-        psfPass.addActionListener(new AEM(this));
-        psfPass.addKeyListener(new KEM(this));
 
         // Botón Aceptar
         btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(UtilesSwing.importarFuenteRecurso(
-                prp.getProperty(PRP_FORM_FONT_RESOURCE, DEF_FORM_FONT_RESOURCE)).
-                deriveFont(Font.BOLD + Font.ITALIC, 30f));
+        btnAceptar.setFont(fntSample.deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnAceptar.setSize(140, 40);
         btnAceptar.setLocation(80, 200);
-        btnAceptar.addActionListener(new AEM(this));
-        btnAceptar.addKeyListener(new KEM(this));
 
         // Botón Cancelar
         btnCancelar = new JButton("Cancelar");
-        btnCancelar.setFont(UtilesSwing.importarFuenteRecurso(
-                prp.getProperty(PRP_FORM_FONT_RESOURCE, DEF_FORM_FONT_RESOURCE)).
-                deriveFont(Font.BOLD + Font.ITALIC, 30f));
+        btnCancelar.setFont(fntSample.deriveFont(Font.BOLD + Font.ITALIC, 30f));
         btnCancelar.setSize(140, 40);
         btnCancelar.setLocation(250, 200);
-        btnCancelar.addActionListener(new AEM(this));
-        btnCancelar.addKeyListener(new KEM(this));
-
-        // Imagen de fondo
-        String bckPpal = prp.getProperty(PRP_FORM_BACKGROUND_RESOURCE, DEF_FORM_BACKGROUND_RESOURCE);
-        URL urlPpal = ClassLoader.getSystemResource(bckPpal);
-        Image imgPpal = new ImageIcon(urlPpal).getImage();
 
         // Panel Principal
-        pnlPpal = new BackgroundPanel(imgPpal);
+        pnlPpal = new BackgroundPanel(imgPapiro);
         pnlPpal.setLayout(null);
         pnlPpal.add(lblUser);
         pnlPpal.add(lblPass);
@@ -186,9 +177,6 @@ public final class GUI extends JFrame {
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addKeyListener(new KEM(this));
-        addMouseListener(new MEM(this));
-        addMouseMotionListener(new MMEM(this));
     }
 
     // Inicialización Anterior    
@@ -203,6 +191,19 @@ public final class GUI extends JFrame {
         // Establecer Favicon
         UtilesSwing.establecerFavicon(this, prp.getProperty(
                 PRP_FAVICON_RESOURCE, DEF_FAVICON_RESOURCE));
+
+        // Registra los Gestores de Eventos
+        txfUser.addActionListener(new AEM(this));
+        txfUser.addKeyListener(new KEM(this));
+        psfPass.addActionListener(new AEM(this));
+        psfPass.addKeyListener(new KEM(this));
+        btnAceptar.addActionListener(new AEM(this));
+        btnAceptar.addKeyListener(new KEM(this));
+        btnCancelar.addActionListener(new AEM(this));
+        btnCancelar.addKeyListener(new KEM(this));
+        addKeyListener(new KEM(this));
+        addMouseListener(new MEM(this));
+        addMouseMotionListener(new MMEM(this));
     }
 
     // Evento de Acción - Respuesta
@@ -210,8 +211,9 @@ public final class GUI extends JFrame {
         if (e.getSource().equals(txfUser)) {
             psfPass.requestFocus();
         } else if (e.getSource().equals(psfPass)) {
-            procesarCredencial();
-            txfUser.requestFocus();
+//            procesarCredencial();
+            btnAceptar.requestFocus();
+//            txfUser.requestFocus();
         } else if (e.getSource().equals(btnAceptar)) {
             procesarCredencial();
             txfUser.requestFocus();
@@ -222,7 +224,7 @@ public final class GUI extends JFrame {
     }
 
     // Evento de Teclado - Respuesta
-    public void procesarTecla(KeyEvent e) {
+    public final void procesarTecla(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 JOptionPane.showMessageDialog(this, "Proceso CANCELADO");
@@ -272,14 +274,14 @@ public final class GUI extends JFrame {
     }
 
     // Inicio de Arrastre de Ventana
-    public void iniciarArrastre(MouseEvent e) {
+    public final void iniciarArrastre(MouseEvent e) {
         // Posición inicio arrastre
         xIni = e.getXOnScreen();
         yIni = e.getYOnScreen();
     }
 
     // Arrastre de Ventana
-    public void gestionarArrastre(MouseEvent e) {
+    public final void gestionarArrastre(MouseEvent e) {
         // Coordenada X
         int xFin = e.getXOnScreen();
         int xOff = xFin - xIni;
