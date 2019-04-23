@@ -35,6 +35,6 @@ public final class MMEM extends MouseMotionAdapter {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        gui.gestionarArrastre(e);
+        gui.procesarArrastre(e);
     }
 }

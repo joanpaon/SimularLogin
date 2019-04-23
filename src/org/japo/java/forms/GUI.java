@@ -177,7 +177,6 @@ public final class GUI extends JFrame {
         btnAceptar.addKeyListener(new KEM(this));
         btnCancelar.addActionListener(new AEM(this));
         btnCancelar.addKeyListener(new KEM(this));
-        addKeyListener(new KEM(this));
         addMouseListener(new MEM(this));
         addMouseMotionListener(new MMEM(this));
     }
@@ -257,7 +256,7 @@ public final class GUI extends JFrame {
     }
 
     // Arrastre de Ventana
-    public final void gestionarArrastre(MouseEvent e) {
+    public final void procesarArrastre(MouseEvent e) {
         // Coordenada X
         int xFin = e.getXOnScreen();
         int xOff = xFin - xIni;
